@@ -10,22 +10,21 @@ app.use(bodyParser.json());
 app.use('/', express.static(path.join(__dirname, '/public')))
 app.get('/', (req, res) => { res.redirect('display.html') })
 
-let state = {}
-
-for (const ch of ['A', 'B', 'C']) {
-    for (let i = 1; i <= 3; i++) {
-        state[`${ch}-${i}`] = 1
-    }
-}
+let arduinoState = "0000"
 
 app.get('/api/state', (req, res) => {
-    res.json(state)
+    res.json({
+        "A-1" : parseInt(arduinoState[0]),
+        "B-1" : parseInt(arduinoState[1]),
+        "C-1" : parseInt(arduinoState[2]),
+        "D-1" : parseInt(arduinoState[3])
+    })
 })
 
-app.post('/api/state', (req, res) => {
-    console.log(req.body)
-    state = req.body
-    res.json(state)
+app.get('/api/arduino/:value', (req, res) => {
+    console.log(`New value recieved : ${req.params.value}`)
+    arduinoState = req.params.value
+    res.json({value: req.params.value});
 })
 
 
