@@ -1,18 +1,8 @@
-let state = {}
+const socket = io();
+socket.on('newState', show)
 
-function refresh() {
-    fetch('/api/state')
-        .then((response) => {
-            return response.json();
-        })
-        .then((myJson) => {
-            console.log(myJson);
-            state = myJson;
-            show()
-        });
-}
-
-function show() {
+function show(state) {
+    console.log(state)
     for (const ch of ['A', 'B', 'C', 'D']) {
         const id = `${ch}-${1}`;
         const value = state[id]
@@ -26,5 +16,3 @@ function show() {
         }
     }
 }
-refresh()
-setInterval(refresh, 700);
